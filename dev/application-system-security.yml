@@ -1,0 +1,57 @@
+server:
+  port: 9000
+  servlet:
+    context-path: /auth
+spring:
+  main:
+    allow-bean-definition-overriding: true  #允许覆盖注册
+  session: # 禁用 session
+    store-type: none
+  application:
+    name: data-provider-uac
+  datasource:
+    druid:
+      url: jdbc:mysql://127.0.0.1:3306/slien-cloud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: 1234qwer
+      initial-size: 10
+      max-active: 50
+      min-idle: 10
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      validation-query: SELECT 1 FROM DUAL
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      filters: stat,wall
+  redis:
+    database: 0
+    host:
+      - 192.168.249.130:6379
+    password: 1234qwer     # 密码（默认为空）
+    timeout: 6000  # 连接超时时长（毫秒）
+    mode: standalone  # standalone单例  sentinel哨兵  cluster集群
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  type-aliases-package: com.slien.cloud.system.security.**.domain
+  configuration:
+    #配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+    map-underscore-to-camel-case: true
+    #配置JdbcTypeForNull, oracle数据库必须配置
+    jdbc-type-for-null: 'null'
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    call-setters-on-nulls: true
+    cache-enabled: true
+pagehelper:
+  helperDialect:  mysql
+  reasonable: true
+  supportMethodsArguments:  true
+  params: count=countSql
